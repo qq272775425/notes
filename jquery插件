@@ -1,0 +1,14 @@
+jquery插件
+使用:
+
+编写:
+	命名格式
+	代码格式
+		;(function($){
+			$.fn.extened({//函数拓展
+				方法名：function(){//调用时与jquery方法的调用一样
+				}
+			});
+		})(jQuery);//;是合并代码时防止前面的代码没有加；用（）括起来function是函数函数立即调用，$是形参，(jQuery)是传入的实参，由于变量的作用域问题避免函数到全局搜索变量，这样可以提高性能，同时还能减小代码体积
+jquery插件
+	Bootstrap:www.bootcss.com

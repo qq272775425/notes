@@ -1,0 +1,209 @@
+js复习
+1 概述
+	ECMAscript定制标准
+	火狐公司 Mozaila开发维护
+	参考手册：
+	overapi.com
+	developer.mozila.org/zh-CN
+	核心语法：dom文档对象模型 bom浏览器对象模型 ECMAscript核心
+			  服务器端不包括dom bom
+	ECMAscript包括语法  类型 语句 关键字 保留字 操作符 对象 
+	dom 把标签看做对象用js控制html
+	dom标准分为DOM0-5 五个级别
+	bom 控制浏览器
+2 ECMAscript使用
+	<script>嵌套
+	scr 引入
+	异步加载js async='async' （ie下使用defer）不会阻塞后面代码执行，意味着不用等待js加载完就执行下面代码
+	但是如果下面代码依赖js文件运行则不可以用
+	script中的src可以访问外网网站实现跨域
+	type属性：js、template（模板）
+	文档模式：quirk mode混杂、怪异测试ie5的兼容性不加<!DOCTYPE html>再ie下可能自动进入quirk mode
+3 语法
+	null==undefined//返回true
+	undefined是从null派生而来所以返回true
+	if(0.1+0.2==0.3)
+	alert（0.3）；//不会得到0.3会得到0.333333333
+	NaN==NaN;返回false
+	isNaN会先进行强制数据类型转换后再进行比对
+	Object js中的类 var a=new Object()
+		a.constructor 获取创建当前对象的构造函数,返回
+		function Object(){}
+	!!吧后面的变量转换成布尔型
+	&&短路运算 前面的是假后面的不执行
+	||短路运算 前面的是真后面的不执行
+	== ===相等与全等 后者数据类型等完全一致返回true
+	break continue结束本次循环进行下次循环
+	with 不推荐使用
+	函数
+		参数 形参实参，函数没有形参时传入实参存储在arguments中
+		agunments是伪数组
+	没有重载
+4 变量作用域
+	动态属性 aa.name使用的时候直接添加
+	var a=5;
+	var b=a;
+	var b=3;
+	alert (a);//输出3，堆栈
+
+	var obj1=new Object()
+	var obj2=obj1;//引用传递
+	
+	作用域逢考必问
+		var声明的是局部变量
+		不加var或者在函数外部声明在函数内部赋值的是全局变量
+		作用域链 一级一级往上找
+		没有块级作用域
+		在for中声明的变量在（）外部可以调用
+	垃圾回收
+		瀑布流，网页游戏
+		引用之后主动赋值为null
+5 引用类型
+	引用类型（对象）也叫做类
+	tostring
+		var arr = ['a','c','b'];
+		alert arr;//输出a,c,b不输出object,
+
+		Array.prototype.toString=function(){
+			return 'xx';  
+		}//重写toString方法
+		var arr = ['a','c','b'];
+		alert arr;//输出xx，toString方法会将定义的数组中的元素遍历出来，并且用，连接输出
+
+		foreach是arr中的方法会循环数组中的元素
+		map每个元素运算后返回一个新数组，省略了for循环
+		
+		var arr1 = ['a1','b2','c3'];
+		function map(arr,fn){
+			for(var i=0,i<arr.length,i++){
+			fn(arr[i],i);
+			}
+			return arr2;
+		}//map 函数作用的封装
+		var arr = map(arr1,function(item,index){
+			return item[0].toUpperCase()+item.substring(1);
+		});
+		console.log(arr3);//将数组中每个元素中的首字母变成大写
+
+		function forEach(arr,fn){
+			for(var i=0;i<arr.length;i++){
+				fn(arr[i],i);
+			}//forEach的封装
+		}
+		forEach(arr1,function(item,index){
+			console.log(item);
+		});
+
+		function every(arr,fn){
+			for(var i=0;i<arr.length;i++){
+				var rs = fn(arr[i],i);
+			if(!rs){
+				return false;
+			}
+
+			}
+			if(i==arr.length){
+				return true;
+			}
+		}//every 的函数封装
+		filter，对数组进行过滤
+	归并方法
+		reduce把数组中所有元素进行运算后返回一个值
+		reduceRight把数组所有元素从右至左进行给定的运算返回一个值
+	函数表达式 函数声明 函数可以作为值传递给函数
+	函数递归是自己调用自己 arguments.callee相当于调用该函数名
+
+	this最容易出现问题的代词 经常发生this指针指丢
+	极其重要的两个方法：call相当于调用函数，call函数的第一个参数会将函数中的this指针改掉  apply  第一个参数是一个对象，第二个参数是一个数组
+6 面向对象的程序设计 
+	   经典的设计模式有23种（四人帮著）
+	   工厂模式：需要不同的对象，但是他们中有相同的属性和值，创建一个对象返回一个对象
+	   构造函数模式：类的方式，首字母大写，出现this，没有return，每个方法都要在构造函数上实例化一遍，浪费内存
+	   原型模式 ：声明一个类，通过类名.prototype.属性、方法
+	   function Person(){
+
+	   }
+	   Person.prototype.name = 'lisi';
+	   Person.prototype.sayName = function(){
+	   	alert(this.name);
+	   }
+	   	var p1 = new Person()
+	   	var p2 = new Person()
+	   		p1.name='wangwu';//原型属性
+	   	alert(p2.name);//输出lisi
+
+	   function Person(){
+		this.name='wangwu';//实例属性，会将原型属性屏蔽
+	   }
+	   Person.prototype.name = 'lisi';
+	   Person.prototype.sayName = function(){
+	   	alert(this.name);
+	   }
+	   	var p1 = new Person()
+	   	var p2 = new Person()
+	   	alert(p2.name);//输出wangwu，构造函数中用this声明的属性是对象实例的属性
+	   	其优先返回，没有在返回原型属性，在没有，返回object下的属性
+	   	规定：属性不要放在原型中，放在构造函数中，用this的方法添加，
+	   	原型：每一个js对象都和另一个对象关联，另一个对象就是我们熟悉的原型
+	   	所有通过对象直接量创建的对象都具有同一个原型对象，并可通过Objec.prototype获得对原型对象的引用。通过关键字new和构造函数调用创建对象的原型就是构造函数prototype属性的值，通过new Object（）创建的对象继承Object。prototype
+	   	没有原型的对象为数不多Object.prototype就是其中之一，他不继承任何属性。所有的内置构造函数都继承Object.prototype。new Date（）继承Date.prototype和Object.prototype，而Date.prototype又继承Object.prototype这一系列连接的原型就是所谓的原型链 
+	继承机制包括对象冒充，和原型链
+
+	对象冒充：
+	   	function ClassA(sColor){
+	   	this.color=sColor;
+	   	this.sayColor = function(){
+	   	alert(this.color);
+	   	};
+	   	}
+	   	function ClassB(sColor){
+	   	this.newMethod = ClassA;//添加ClassA方法
+	   	this.newMethod(sColor);
+	   	delete this.newMethod;//防止该方法在外部访问
+
+	   	//ClassA.call(this,sColor)//
+	   	}
+	原型链
+	   	function ClassA(sColor){
+	   	this.color=sColor;
+	   	}
+	   	ClassA.prototype.sayColor = function(){
+	   	alert(this.color);
+	   	};
+	   	var oA=new ClassA();
+	   	
+	   	function ClassB(sColor){
+	   	ClassA.call(this,sColor);//利用对象冒充继承属性
+	   	}
+	   	ClassB.prototype = oA;//利用原型继承方法
+	   	ClassB.prototype.constructor = ClassB;//将被classA覆盖的原型修改为classB
+	   	var o = new ClassB('red');
+	   	o.sayColor();
+7 函数表达式
+	闭包
+8 BOM（brower object model）
+最顶层对象window 
+location和地址有关的信息
+navigator对象userAgent//判断浏
+	dom操作      
+		实现js的按需加载
+		动态样式 
+	dom元素获取
+		document.getElementById
+		document.getelementsByTagName
+		document.getelementsByName(input)
+		document.getelementsByClassName//ie不兼容
+dom节点	
+	document最顶层节点
+    element元素节点
+    text文本节点
+    comment注释节点
+    属性方法：节点名称
+    		节点类型
+    		节点值、
+dom事件
+dom样式
+	对象.style.属性
+	this。style。属性/this指向当前调用的对象更加灵活
+	
+    		 
